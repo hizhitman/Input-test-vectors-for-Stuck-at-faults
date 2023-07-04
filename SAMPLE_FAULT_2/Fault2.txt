@@ -1,0 +1,2 @@
+FAULT_AT = A
+FAULT_TYPE = SA0
