@@ -5,10 +5,10 @@ Python 3.8
 Library needed:networkx ($pip install networkx)
 
 Project Description:
-1.We have a purely combinational circuit, made of just AND, OR, NOT and XOR gates, with 4 inputs A, B, C and D.
+- We have a purely combinational circuit, made of just AND, OR, NOT and XOR gates, with 4 inputs A, B, C and D.
 The circuit netlist is provided and we can construct the circuit from it using file reading techniques and other manipulations. The stuck at fault node and type of fault is provided and we are expected to print the list of possible input test vectors to an output file. 
 
-2. Solution in a nutshell:
+- Solution in a nutshell:
 A Directed Acyclic Graph is created by using the ‘networkx’ library from Python. We also create 16 test cases to test all different variations of the inputs.
 
 We need to separately write cases for each of the 4 gates and create a solved graph, with updated values at the nodes. We do this twice: 
