@@ -9,7 +9,7 @@ Requirements:
   - "Fault.txt" containing the faulty node and type of fault
 - Make sure you have the libraries imported and the Text files in the same directory as the Python application used.
 - Just run the code titled "main.py" to create a file named "Sample output.txt" in the same directory 
-
+- You also need to have downloaded QUCS 19 and import the given .sch file to check the simulation 
 QUCS simulation schematics have been attached as well
 
 
