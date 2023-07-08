@@ -1,0 +1,2 @@
+FAULT_AT = net_e
+FAULT_TYPE = SA1
