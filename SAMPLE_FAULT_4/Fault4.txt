@@ -1,2 +1,0 @@
-FAULT_AT = net_g
-FAULT_TYPE = SA0
