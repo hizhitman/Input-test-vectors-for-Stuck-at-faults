@@ -9,12 +9,12 @@ Requirements:
   - "Fault.txt" containing the faulty node and type of fault
 - Make sure you have the libraries imported and the Text files in the same directory as the Python application used.
 - Just run the code titled "main.py" to create a file named "Sample output.txt" in the same directory 
-- You also need to have downloaded QUCS 19 and import the given .sch file to check the simulation 
-QUCS simulation schematics have been attached as well
+- You also need to have downloaded QUCS 19 and import the given .sch file to check the simulations
+- QUCS simulation schematics have been attached as well
 
 
 Proof of correctness:\
-Other sample inputs and outputs are included as well under the title: SAMPLE_FAULT_N
+Other sample inputs and outputs are included as well under the title: SAMPLE_FAULTN
 
 Project Description:
 - We have a purely combinational circuit, made of just AND, OR, NOT and XOR gates, with 4 inputs A, B, C and D.
