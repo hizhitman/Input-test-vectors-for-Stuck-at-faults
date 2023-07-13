@@ -1,6 +1,6 @@
 import networkx as nx
 import time
-
+from memory_profiler import *
 from itertools import permutations
 
 def main():
@@ -47,11 +47,18 @@ def main():
     for out in outputs:#For the other nodes except the first 4, We set the gatetypes to the corresponding Output nodes
         g.nodes[out]["gateType"] = outputs[out]
     n1 = list(nx.topological_sort(g)) #n1 contains all the nodes in the order in which they appear in the graph
+  
+    a=[]
+    for node in n1:
+        a.extend(list(g.predecessors(node)))
+   
 
+        
 
     for node in n1:
         g.nodes[node]['value'] = 0 #We initialise all nodes with a value of 0
     f=g.copy() #We create a deep copy of this graph for the second DAG evaluation
+
 
 
     l1= ["A","B","C","D"]  #l1 holds the primary inputs
@@ -91,9 +98,11 @@ def main():
             g.nodes[node]['value'] =  XOR(ips[0], ips[1]) 
         if g.nodes[node]['gateType'] == "~":
             g.nodes[node]['value'] =  NOT(ips[0]) 
+    
     #This update code is for the second DAG evaluation. This takes a node and checks the predecessor and gatetype to change the value in the node in graph f
     def fault_update(node):
         ip = list(f.predecessors(node))
+
         ips = []
         for i in ip:
             ips.append(f.nodes[i]['value'])
@@ -116,7 +125,8 @@ def main():
     #This DAG function checks if the node is not the predecessor of the fault node, and that it is not primary, and sends the node to DAG evaluation
     def fault_DAG():
         for node in n1 :
-            if node not in pred:
+            if node not in uu:
+           
                 
                 if f.nodes[node]['gateType'] == "PrimaryInput":
                     continue
@@ -137,14 +147,23 @@ def main():
             for ele in l1:
                 g.nodes[ele]['value'] = int(l21[l1.index(ele)]) #We get different values of A,B,C,D from l2 and change it in the graph g
             DAG() #We change the values of other output nodes 
+            
             u=l2.pop(0) #We move to the next set of input values
+            #for node in n1:
+            #    print(g.nodes[node]['value'],end='')
+           # print(',')
+            
+            
             if g.nodes[node_fault]['value']==1^int(type_fault): #l3 will have all A,B,C,D values such that the value at the node is opposite to the stuck at given
                 for node in n1:
                     l3.append(u) #This list is created to store values for the next round of faulty evaluation
         global l4; #We save l4 as the set of values in l3 to ensure uniqueness
 
+
         l4=list(set(l3))
         l5=list(l4)
+        
+
         #The below code is to make sure that the order of elements returned by this evaluation and the faulty evaluation are in the same order as ;4
 
         while len(l5) !=0 :
@@ -161,6 +180,7 @@ def main():
                     s+=str((g.nodes[node]['value']))
 
             yyy.append(s)
+   
         return yyy
 
 
@@ -223,8 +243,13 @@ def main():
 
     begin = time.time()
     var1=solveDAG(g, l1, l2, n1)
-    #print(var1)
-    f.remove_nodes_from(pred) #This removes the nodes of the predecessors as well
+  
+ 
+    for pre in pred: #fanout condition with predecessors coinciding
+        
+        if a.count(pre)==1: #ensures no fanout
+            f.remove_node(pre) #This removes the nodes of the predecessors as well
+    gh=f.nodes
 
     F=0 #Flag 
     if node_fault in l1 or pred[0] in l1: #if the fault node is at Primary level, or at one of the inputs A,B,C,D
@@ -236,11 +261,14 @@ def main():
 
     elif node_fault not in l1 or pred[0] not in l1:#if the fault node is at Secondary level
         uu={}
-        
-        for i in pred:
-            uu[i]=(list(inputs).index(i))
+      
+
+        for im in pred:
+            if im not in gh:
+                uu[im]=(list(inputs).index(im))
+
         var2=solve_with_faults_secondary(f, l1, l4,n1,uu)
-    #print(var2)
+  
     fobj=open("Sample Output.txt",'a+') #Writing to the output file
 
     for i in range(len(var1)):
@@ -250,14 +278,15 @@ def main():
             F=1
             for ii in a_s:
                 a_l.append(int(ii))
+                
             #print("[A, B, C, D] =",a_l,", Z = ",int(var2[i][-1]))
             fobj.write("[A, B, C, D] ="+str(a_l)+", Z = "+(var2[i][-1])+"\n")
-    #print(n1)
+   
     if F==0:
         fobj.write("NO INPUT TEST VECTOR CAN HELP US IDENTIFY THIS STUCK-AT-FAULT")
-      
-
+    #print(nx.draw(g,pos=nx.spring_layout(g),with_labels=True,node_color='y',font_color='r',arrowsize=5))
     end = time.time()
-    #fobj.close()
+    fobj.close()
     print("Time taken is "+str(end-begin))
+    
 main()
